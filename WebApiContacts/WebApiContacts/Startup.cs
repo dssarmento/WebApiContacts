@@ -1,4 +1,8 @@
 using Contacts.Data.Context;
+using Contacts.Data.Repositorys;
+using Contacts.Domain.Interfaces;
+using Contacts.Service.Mapper;
+using Contacts.Service.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,14 +13,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Serialization;
+using Microsoft.OpenApi.Models;
 using System;
 using System.Linq;
 using System.Text;
-using Microsoft.OpenApi.Models;
-using Contacts.Domain.Interfaces;
-using Contacts.Data.Repositorys;
-using Contacts.Service.Services;
 
 namespace WebApiContacts.Server
 {
@@ -33,7 +33,7 @@ namespace WebApiContacts.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>(options =>
-               options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")
+               options.UseSqlServer(configuration.GetConnectionString("SandroDbConnection")
                ));
 
             services.AddControllers();
@@ -46,6 +46,15 @@ namespace WebApiContacts.Server
 
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IAccountService, AccountService>();
+
+            services.AddAutoMapper(typeof(ContatoMapper));
+            services.AddAutoMapper(typeof(DDDMapper));
+
+            //services.Logging.ClearProviders();
+            //services.Logging.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration
+            //{
+            //    LogLevel = LogLevel.Information,
+            //}));
 
             services.AddMvc().AddNewtonsoftJson();
 

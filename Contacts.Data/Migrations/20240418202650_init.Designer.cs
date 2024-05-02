@@ -3,6 +3,7 @@ using Contacts.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Contacts.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240418202650_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,29 +79,6 @@ namespace Contacts.Data.Migrations
                     b.ToTable("DDDs");
                 });
 
-            modelBuilder.Entity("Contacts.Domain.Models.UserJwtToken", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserJwtToken");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -120,15 +100,15 @@ namespace Contacts.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "da224b17-ec28-4fca-b82b-d6e9b4bff8e3",
-                            ConcurrencyStamp = "60618c7a-114c-4070-b39c-401817b9fc08",
+                            Id = "1aa3d74f-ccb7-4912-9a83-9eb64bf41220",
+                            ConcurrencyStamp = "6712719c-bd3c-4e9a-80af-87f5fa883e08",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "bdfced0d-ca08-439c-bc2f-9c3dbef9becc",
-                            ConcurrencyStamp = "0805419f-4bf6-4bb8-8dbb-f93ba435f51b",
+                            Id = "2f70c51d-c9b3-48cd-80a4-d9da8af665cd",
+                            ConcurrencyStamp = "68c251e0-465b-471a-90da-6e6a7f74c1b7",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

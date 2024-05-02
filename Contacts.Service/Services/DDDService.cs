@@ -1,43 +1,89 @@
-﻿using Contacts.Domain.ModelsView;
-using WebApiContacts.Domain.Recursos;
-using System.Collections.Generic;
+﻿using AutoMapper;
 using Contacts.Domain.Interfaces;
-using Contacts.Data.Context;
 using Contacts.Domain.Models;
+using Contacts.Domain.ModelsView;
+using Microsoft.Extensions.Logging;
 
 namespace Contacts.Service.Services
 {
     public class DDDService : IDDDService
     {
         private readonly IDDDRepository _dDDRepository;
+        private readonly IMapper _mapper;
+        private readonly ILogger<ContatoService> _logger;
 
-        public DDDService(IDDDRepository dDDRepository)
+        public DDDService(IDDDRepository dDDRepository, IMapper mapper, ILogger<ContatoService> logger)
         {
             _dDDRepository = dDDRepository;
-        }
-        public DDD Delete(int id)
-        {
-            return _dDDRepository.Delete(id);
+            _mapper = mapper;
+            _logger = logger;
         }
 
-        public List<DDD> GetAll()
+        public IList<DDDViewModel> BuscaTodosDDDs()
         {
-            return _dDDRepository.GetAll();
+            try
+            {
+                return _mapper.Map<IList<DDDViewModel>>(_dDDRepository.BuscaTodosDDDs());
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Erro na aplicação - {ex}");
+                throw;
+            }
         }
 
-        public DDD GetById(int id)
+        public DDDViewModel BuscaDDDPorId(int id)
         {
-            return _dDDRepository.GetById(id);
+            try
+            {
+                return _mapper.Map<DDDViewModel>(_dDDRepository.BuscaDDDPorId(id));
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Erro na aplicação - {ex}");
+                throw;
+            }
         }
 
-        public DDDRetornoView Post(DDDView dDD)
+        public DDDViewModel CriaDDD(DDDViewModel DDD)
         {
-            return _dDDRepository.Post(dDD);
+            try
+            {
+                var DddMapping = _dDDRepository.CriaDDD(_mapper.Map<DDD>(DDD));
+                return _mapper.Map<DDDViewModel>(DddMapping);
+            }
+            catch(Exception ex) 
+            {
+                _logger.LogError($"Erro na aplicação - {ex}");
+                throw;
+            }
         }
 
-        public DDDRetornoView Put(DDDRetornoView dDD)
+        public DDDViewModel AtualizaDDD(DDDViewModel DDD)
         {
-            return _dDDRepository.Put(dDD);
+            try
+            {
+                var DddMapping = _dDDRepository.AtualizaDDD(_mapper.Map<DDD>(DDD));
+                return _mapper.Map<DDDViewModel>(DddMapping);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Erro na aplicação - {ex}");
+                throw;
+            }
+        }
+
+        public bool DeletaDDD(int id)
+        {
+            try
+            {
+                return _dDDRepository.DeletaDDD(id);
+            }
+            catch(Exception ex) 
+            {
+                _logger.LogError($"Erro na aplicação - {ex}");
+                throw;
+            }
         }
     }
 }

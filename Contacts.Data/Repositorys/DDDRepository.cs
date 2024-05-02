@@ -1,68 +1,56 @@
-﻿using Contacts.Domain.Models;
-using System.Linq;
-using System.Threading.Tasks;
-using Contacts.Domain.ModelsView;
-using WebApiContacts.Domain.Recursos;
-using System.Collections.Generic;
+﻿using Contacts.Data.Context;
 using Contacts.Domain.Interfaces;
-using Contacts.Data.Context;
+using Contacts.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
-using Contacts.Data.Utils;
 
 namespace Contacts.Data.Repositorys
 {
     public class DDDRepository : IDDDRepository
     {
-        private readonly AppDbContext context;
+        private readonly AppDbContext _context;
 
         public DDDRepository(AppDbContext context)
         {
-            this.context = context;
+            _context = context;
         }
 
-        public DDD Delete(int id)
+        public IList<DDD> BuscaTodosDDDs()
         {
-            var dDD = new DDD { DDDId = id };
-            context.Remove(dDD);
-            context.SaveChangesAsync();
-            return dDD;
+            return _context.DDDs.AsNoTracking().ToList();
         }
 
-        public List<DDD> GetAll()
+        public DDD BuscaDDDPorId(int id)
         {
-            return context.DDDs.ToList();
+            return _context.DDDs.Where(d => d.DDDId == id).AsNoTracking().FirstOrDefault() ?? 
+                throw new KeyNotFoundException("DDD não encontrado");
         }
 
-        public DDD GetById(int id)
+        public DDD CriaDDD(DDD DDD)
         {
-            return (DDD)context.DDDs.Where(x => x.DDDId == id);
+            _context.DDDs.Add(DDD);
+            _context.SaveChanges();
+
+            return DDD;
         }
 
-        public DDDRetornoView Post(DDDView dDD)
+        public DDD AtualizaDDD(DDD DDD)
         {
-            DDD ddados = new DDD();
-            ddados.Nome = dDD.Nome;
+            _context.DDDs.Update(DDD);
+            _context.SaveChangesAsync();
 
-            context.Add(ddados);
-            context.SaveChangesAsync();
-
-            DDDRetornoView dretorno = new DDDRetornoView();
-            dretorno.DDDId = ddados.DDDId;
-            dretorno.Nome = ddados.Nome;
-            return dretorno;
+            return DDD;
         }
 
-        public DDDRetornoView Put(DDDRetornoView dDD)
+        public bool DeletaDDD(int id)
         {
-            DDD ddados = new DDD();
-            ddados.DDDId = dDD.DDDId;
-            ddados.Nome = dDD.Nome;
+            var ddd = BuscaDDDPorId(id);
 
-            context.Entry(ddados).State = EntityState.Modified;
-            context.SaveChangesAsync();
+            if (ddd == null) return false;
 
-            return dDD;
+            _context.DDDs.Remove(ddd);
+            _context.SaveChangesAsync();
+
+            return true;
         }
     }
 }

@@ -1,20 +1,16 @@
-﻿using Contacts.Domain.Models;
-using System.Linq;
-using System.Threading.Tasks;
-using Contacts.Domain.ModelsView;
-using WebApiContacts.Domain.Recursos;
+﻿using Contacts.Domain.ModelsView;
 using System.Collections.Generic;
 
 namespace Contacts.Domain.Interfaces
 {
     public interface IContatoService
     {
-        List<Contato> GetContatosDDDId(int id);
-        List<Contato> GetContatosDDDNome(string Nome);
-        List<Contato> GetAll();
-        Contato GetByID(int id);
-        ContatoRetornoView Post(ContatoView contato);
-        ContatoRetornoView Put(ContatoRetornoView contato);
-        Contato Delete(int id);
+        IList<ContatoViewModel> BuscaContatoPorDDDId(int id);
+        IList<ContatoViewModel> BuscaContatoPorDDDNome(string Nome);
+        IList<ContatoViewModel> BuscaTodosContatos();
+        ContatoViewModel BuscaContatoPorId(int id);
+        ContatoViewModel CriaNovoContato(ContatoViewModel contato);
+        ContatoViewModel AtualizaContato(ContatoViewModel contato);
+        bool DeletaContato(int id);
     }
 }

@@ -1,97 +1,77 @@
-﻿using Contacts.Domain.Models;
-using System.Linq;
-using System.Threading.Tasks;
-using Contacts.Domain.ModelsView;
-using WebApiContacts.Domain.Recursos;
-using System.Collections.Generic;
+﻿using Contacts.Data.Context;
 using Contacts.Domain.Interfaces;
-using Contacts.Data.Context;
+using Contacts.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
-using Contacts.Data.Utils;
 
 namespace Contacts.Data.Repositorys
 {
     public  class ContatoRepository : IContatoRepository
     {
-        private readonly AppDbContext context;
+        private readonly AppDbContext _context;
 
         public ContatoRepository(AppDbContext context)
         {
-            this.context = context;
+            _context = context;
         }
 
-        public Contato Delete(int id)
+        public IList<Contato> BuscaTodosContatos()
         {
-            var Contato = new Contato { ContatoId = id };
-            context.Remove(Contato);
-            context.SaveChangesAsync();
-            return Contato;
+            return _context.Contatos.AsNoTracking().ToList();
         }
 
-        public List<Contato> GetAll()
+        public Contato BuscaContatoPorId(int id)
         {
-            return context.Contatos.ToList();
+            return _context.Contatos.AsNoTracking().FirstOrDefault(x => x.ContatoId == id) ?? 
+                throw new KeyNotFoundException("Contato não encontrado");
         }
 
-        public Contato GetById(int id)
+        public IList<Contato> BuscaContatosPorDDDId(int id)
         {
-            return (Contato)context.Contatos.Where(x => x.ContatoId == id);
+            return _context.Contatos.Where(p => p.DDDId == id).AsNoTracking().ToList();
         }
 
-        public List<Contato> GetContatosDDDId(int id)
+        public IList<Contato> BuscaContatosPorDDDNome(string Nome)
         {
-            return  context.Contatos.Where(p => p.DDDId == id).ToList();
-        }
-
-        public List<Contato> GetContatosDDDNome(string Nome)
-        {
-            var listContatos = (from Co in context.Contatos
-                                join Dd in context.DDDs on Co.DDDId equals Dd.DDDId
+            var listContatos = (from Co in _context.Contatos
+                                join Dd in _context.DDDs on Co.DDDId equals Dd.DDDId
                                 where Dd.Nome.Trim().ToUpper().ToString() == Nome.Trim().ToUpper().ToString()
                                 select new Contato()
                                 {
                                     ContatoId = Co.ContatoId,
                                     Nome = Co.Nome,
                                     Telefone = Co.Telefone,
-                                    Email =Co.Email,
+                                    Email = Co.Email,
                                     DDDId = Co.DDDId
-                                }).ToList();
+                                }).AsNoTracking().ToList();
 
             return listContatos;
         }
 
-        public ContatoRetornoView Post(ContatoView contato)
+        public Contato CriaContato(Contato contato)
         {
-            Contato ddados = new Contato();
-            ddados.Nome = contato.Nome;
-            ddados.Telefone = contato.Telefone;
-            ddados.Email = contato.Email;
-            ddados.DDDId = contato.DDDId;
+            _context.Contatos.Add(contato);
+            _context.SaveChanges();
 
-            context.Add(ddados);
-            context.SaveChangesAsync();
-
-            ContatoRetornoView dretorno = new ContatoRetornoView();
-            dretorno.Nome = ddados.Nome;
-            dretorno.Telefone = ddados.Telefone;
-            dretorno.Email = ddados.Email;
-            dretorno.DDDId = ddados.DDDId;
-            return dretorno;
+            return contato;
         }
 
-        public ContatoRetornoView Put(ContatoRetornoView contato)
+        public Contato AtualizaContato(Contato contato)
         {
-            Contato ddados = new Contato();
-            ddados.ContatoId = contato.ContatoId;
-            ddados.Nome = contato.Nome;
-            ddados.Telefone = contato.Telefone;
-            ddados.Email = contato.Email;
-            ddados.DDDId = contato.DDDId;
-
-            context.Entry(ddados).State = EntityState.Modified;
-            context.SaveChangesAsync();
+            _context.Contatos.Update(contato);
+            _context.SaveChangesAsync();
             return contato;
+        }
+
+        public bool DeletaContato(int id)
+        {
+            var contato = BuscaContatoPorId(id);
+
+            if (contato == null) return false;
+
+            _context.Remove(contato);
+            _context.SaveChangesAsync();
+
+            return true;
         }
     }
 }

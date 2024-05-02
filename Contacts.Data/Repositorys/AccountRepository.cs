@@ -1,26 +1,12 @@
-﻿using Contacts.Domain.Models;
-using System.Linq;
-using System.Threading.Tasks;
-using Contacts.Domain.ModelsView;
-using WebApiContacts.Domain.Recursos;
-using System.Collections.Generic;
+﻿using Contacts.Data.Context;
 using Contacts.Domain.Interfaces;
-using Contacts.Data.Context;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
-using Contacts.Data.Utils;
+using Contacts.Domain.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
-using Newtonsoft.Json.Linq;
 
 namespace Contacts.Data.Repositorys
 {
