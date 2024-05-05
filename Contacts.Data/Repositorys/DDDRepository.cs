@@ -1,4 +1,5 @@
 ﻿using Contacts.Data.Context;
+using Contacts.Data.Utils;
 using Contacts.Domain.Interfaces;
 using Contacts.Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -16,13 +17,14 @@ namespace Contacts.Data.Repositorys
 
         public IList<DDD> BuscaTodosDDDs()
         {
-            return _context.DDDs.AsNoTracking().ToList();
+            return CacheManager.ObterOuDefinirCache("TodosOsDDDs", () => _context.DDDs.AsNoTracking().ToList(), DateTimeOffset.UtcNow.AddMinutes(10));
         }
 
         public DDD BuscaDDDPorId(int id)
         {
-            return _context.DDDs.Where(d => d.DDDId == id).AsNoTracking().FirstOrDefault() ?? 
-                throw new KeyNotFoundException("DDD não encontrado");
+           return CacheManager.ObterOuDefinirCache("BuscaDDDPorId", () => 
+            _context.DDDs.Where(d => d.DDDId == id).AsNoTracking().FirstOrDefault() ?? 
+            throw new KeyNotFoundException("DDD não encontrado"), DateTimeOffset.UtcNow.AddMinutes(10));
         }
 
         public DDD CriaDDD(DDD DDD)
