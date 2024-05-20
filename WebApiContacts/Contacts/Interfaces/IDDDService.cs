@@ -6,10 +6,10 @@ namespace Contacts.Domain.Interfaces
 {
     public interface IDDDService
     {
-        IList<DDDViewModel> BuscaTodosDDDs();
+        List<DDD> BuscaTodosDDDs();
         DDDViewModel BuscaDDDPorId(int id);
-        DDDViewModel CriaDDD(DDDViewModel dDD);
-        DDDViewModel AtualizaDDD(DDDViewModel dDD);
+        DDD CriaDDD(DDDViewModel dDD);
+        DDD AtualizaDDD(DDDViewUpdateModel dDD);
         bool DeletaDDD(int id);
     }
 }

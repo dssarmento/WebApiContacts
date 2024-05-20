@@ -5,6 +5,7 @@ using Contacts.Domain.ModelsView;
 using WebApiContacts.Domain.Recursos;
 using System.Collections.Generic;
 
+
 namespace Contacts.Domain.Interfaces
 {
     public interface IAccountService

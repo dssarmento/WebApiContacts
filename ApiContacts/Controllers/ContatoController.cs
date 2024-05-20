@@ -35,7 +35,7 @@ namespace ApiContacts.Controllers
         }
 
         [HttpGet("BuscaContatoPorId/{id}")]
-        [Authorize]
+        //[Authorize]
         public IActionResult Get(int id)
         {
             try
@@ -96,7 +96,7 @@ namespace ApiContacts.Controllers
 
         [HttpPut]
         [Authorize]
-        public IActionResult AtualizaContato(ContatoViewModel contato)
+        public IActionResult AtualizaContato(ContatoViewUpdateModel contato)
         {
             try
             {

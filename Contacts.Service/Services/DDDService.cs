@@ -10,20 +10,20 @@ namespace Contacts.Service.Services
     {
         private readonly IDDDRepository _dDDRepository;
         private readonly IMapper _mapper;
-        private readonly ILogger<ContatoService> _logger;
+        private readonly ILogger<DDDService> _logger;
 
-        public DDDService(IDDDRepository dDDRepository, IMapper mapper, ILogger<ContatoService> logger)
+        public DDDService(IDDDRepository dDDRepository, IMapper mapper, ILogger<DDDService> logger)
         {
             _dDDRepository = dDDRepository;
             _mapper = mapper;
             _logger = logger;
         }
 
-        public IList<DDDViewModel> BuscaTodosDDDs()
+        public List<DDD> BuscaTodosDDDs()
         {
             try
             {
-                return _mapper.Map<IList<DDDViewModel>>(_dDDRepository.BuscaTodosDDDs());
+                return _dDDRepository.BuscaTodosDDDs();
             }
             catch(Exception ex)
             {
@@ -45,12 +45,12 @@ namespace Contacts.Service.Services
             }
         }
 
-        public DDDViewModel CriaDDD(DDDViewModel DDD)
+        public DDD CriaDDD(DDDViewModel DDD)
         {
             try
             {
                 var DddMapping = _dDDRepository.CriaDDD(_mapper.Map<DDD>(DDD));
-                return _mapper.Map<DDDViewModel>(DddMapping);
+                return DddMapping;
             }
             catch(Exception ex) 
             {
@@ -59,12 +59,16 @@ namespace Contacts.Service.Services
             }
         }
 
-        public DDDViewModel AtualizaDDD(DDDViewModel DDD)
+        public DDD AtualizaDDD(DDDViewUpdateModel dDD)
         {
             try
             {
-                var DddMapping = _dDDRepository.AtualizaDDD(_mapper.Map<DDD>(DDD));
-                return _mapper.Map<DDDViewModel>(DddMapping);
+                DDD vdDD = new DDD();
+                vdDD.DDDId = dDD.DDDId;
+                vdDD.Ddd = dDD.Ddd;
+                vdDD.Nome = dDD.Nome;
+                var DddMapping = _dDDRepository.AtualizaDDD(vdDD);
+                return DddMapping;
             }
             catch(Exception ex)
             {

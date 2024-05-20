@@ -1,16 +1,17 @@
-﻿using Contacts.Domain.ModelsView;
+﻿using Contacts.Domain.Models;
+using Contacts.Domain.ModelsView;
 using System.Collections.Generic;
 
 namespace Contacts.Domain.Interfaces
 {
     public interface IContatoService
     {
-        IList<ContatoViewModel> BuscaContatoPorDDDId(int id);
-        IList<ContatoViewModel> BuscaContatoPorDDDNome(string Nome);
-        IList<ContatoViewModel> BuscaTodosContatos();
-        ContatoViewModel BuscaContatoPorId(int id);
-        ContatoViewModel CriaNovoContato(ContatoViewModel contato);
-        ContatoViewModel AtualizaContato(ContatoViewModel contato);
+        List<Contato> BuscaContatoPorDDDId(int id);
+        List<Contato> BuscaContatoPorDDDNome(string Nome);
+        List<Contato> BuscaTodosContatos();
+        Contato BuscaContatoPorId(int id);
+        Contato CriaNovoContato(ContatoViewModel contato);
+        Contato AtualizaContato(ContatoViewUpdateModel contato);
         bool DeletaContato(int id);
     }
 }

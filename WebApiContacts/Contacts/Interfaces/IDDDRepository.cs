@@ -5,7 +5,7 @@ namespace Contacts.Domain.Interfaces
 {
     public interface IDDDRepository
     {
-        IList<DDD> BuscaTodosDDDs();
+        List<DDD> BuscaTodosDDDs();
         DDD BuscaDDDPorId(int id);
         DDD CriaDDD(DDD dDD);
         DDD AtualizaDDD(DDD dDD);

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Contacts.Data.Repositorys;
 using Contacts.Domain.Interfaces;
 using Contacts.Domain.Models;
 using Contacts.Domain.ModelsView;
 using Microsoft.Extensions.Logging;
+using NPOI.SS.Formula.Functions;
 
 namespace Contacts.Service.Services
 {
@@ -19,11 +21,11 @@ namespace Contacts.Service.Services
             _logger = logger;
         }
 
-        public IList<ContatoViewModel> BuscaTodosContatos()
+        public List<Contato> BuscaTodosContatos()
         {
             try
             {
-                return _mapper.Map <IList<ContatoViewModel>> (_contatoRepository.BuscaTodosContatos());
+                return _contatoRepository.BuscaTodosContatos();
             }
             catch (Exception ex)
             {
@@ -32,11 +34,11 @@ namespace Contacts.Service.Services
             }
         }
 
-        public ContatoViewModel BuscaContatoPorId(int id)
+        public Contato BuscaContatoPorId(int id)
         {
             try
             {
-                return _mapper.Map<ContatoViewModel>(_contatoRepository.BuscaContatoPorId(id));
+                return _contatoRepository.BuscaContatoPorId(id);
             }
             catch (Exception ex)
             {
@@ -45,11 +47,11 @@ namespace Contacts.Service.Services
             }
         }
 
-        public IList<ContatoViewModel> BuscaContatoPorDDDId(int id)
+        public List<Contato> BuscaContatoPorDDDId(int id)
         {
             try
             {
-                return _mapper.Map<IList<ContatoViewModel>>(_contatoRepository.BuscaContatosPorDDDId(id));
+                return _contatoRepository.BuscaContatosPorDDDId(id);
             }
             catch (Exception ex)
             {
@@ -58,11 +60,11 @@ namespace Contacts.Service.Services
             }
         }
 
-        public IList<ContatoViewModel> BuscaContatoPorDDDNome(string Nome)
+        public List<Contato> BuscaContatoPorDDDNome(string Nome)
         {
             try
             {
-                return _mapper.Map<IList<ContatoViewModel>>(_contatoRepository.BuscaContatosPorDDDNome(Nome));
+                return _contatoRepository.BuscaContatosPorDDDNome(Nome);
             }
             catch (Exception ex)
             {
@@ -71,11 +73,12 @@ namespace Contacts.Service.Services
             }
         }
 
-        public ContatoViewModel CriaNovoContato(ContatoViewModel contatoView)
+        public Contato CriaNovoContato(ContatoViewModel Contato)
         {
             try
             {
-                return _mapper.Map<ContatoViewModel>(_contatoRepository.CriaContato(_mapper.Map<Contato>(contatoView)));
+                var ContatoMapping = _contatoRepository.CriaContato(_mapper.Map<Contato>(Contato));
+                return ContatoMapping;
             }
             catch (Exception ex)
             {
@@ -84,11 +87,18 @@ namespace Contacts.Service.Services
             }
         }
 
-        public ContatoViewModel AtualizaContato(ContatoViewModel contato)
+        public Contato AtualizaContato(ContatoViewUpdateModel contato)
         {
             try
             {
-                return _mapper.Map<ContatoViewModel>(_contatoRepository.AtualizaContato(_mapper.Map<Contato>(contato)));
+                Contato vContato = new Contato();
+                vContato.ContatoId = contato.ContatoId;
+                vContato.Nome = contato.Nome;
+                vContato.Telefone = contato.Telefone;
+                vContato.Email = contato.Email;
+                vContato.DDDId = contato.DDDId;
+                var ContatoMapping = _contatoRepository.AtualizaContato(vContato);
+                return ContatoMapping;
             }
             catch (Exception ex)
             {

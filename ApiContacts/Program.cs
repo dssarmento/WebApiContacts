@@ -5,6 +5,8 @@ using Contacts.Service.Logger;
 using Contacts.Service.Mapper;
 using Contacts.Service.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -23,29 +25,55 @@ var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .Build();
 
-var key = Encoding.ASCII.GetBytes(configuration.GetValue<string>("SecretJWT"));
+//var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["AllowedHosts:SecretJWT"]));
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
 
-builder.Services.AddAuthentication(authenticationOpt =>
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                 options.TokenValidationParameters = new TokenValidationParameters
+                 {
+                     ValidateIssuer = false,
+                     ValidateAudience = false,
+                     ValidateLifetime = true,
+                     ValidateIssuerSigningKey = true,
+                     IssuerSigningKey = new SymmetricSecurityKey(
+                     Encoding.UTF8.GetBytes(configuration.GetValue<string>("SecretJWT"))),
+                     ClockSkew = TimeSpan.Zero
+                 }
+                );
+
+builder.Services.AddResponseCompression(opts =>
 {
-    authenticationOpt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    authenticationOpt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(jwtBearerOpt =>
-  {
-      jwtBearerOpt.RequireHttpsMetadata = false;
-      jwtBearerOpt.SaveToken = true;
-      jwtBearerOpt.TokenValidationParameters = new TokenValidationParameters()
-      {
-          ValidateIssuerSigningKey = true,
-          IssuerSigningKey = new SymmetricSecurityKey(key),
-          ValidateIssuer = false,
-          ValidateAudience = false,
-      };
-  });
+    opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+        new[] { "application/octet-stream" });
+});
+
+//builder.Services.AddAuthentication(authenticationOpt =>
+//{
+//    authenticationOpt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//    authenticationOpt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//}).AddJwtBearer(jwtBearerOpt =>
+//  {
+//      jwtBearerOpt.RequireHttpsMetadata = false;
+//      jwtBearerOpt.SaveToken = true;
+//      jwtBearerOpt.TokenValidationParameters = new TokenValidationParameters()
+//      {
+//          ValidateIssuer = false,
+//          ValidateAudience = false,
+//          ValidateLifetime = true,
+//          ValidateIssuerSigningKey = true,
+//          IssuerSigningKey = new SymmetricSecurityKey(
+//                     Encoding.UTF8.GetBytes(configuration.GetValue<string>("SecretJWT"))),
+//          ClockSkew = TimeSpan.Zero
+//      };
+//  });
 
 // Sql server configuration
 builder.Services.AddDbContext<AppDbContext>(options =>
-               options.UseSqlServer(builder.Configuration.GetConnectionString("SandroDbConnection") ?? 
-               throw new InvalidOperationException("Connection string 'SandroDbConnection' not found."))
+               options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
                );
 
 // Dependence injection configuration 
@@ -58,8 +86,13 @@ builder.Services.AddScoped<IContatoService, ContatoService>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 
-//builder.Services.AddScoped<IAccountRepository, AccountRepository>();
-//builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+
+builder.Services.AddMvc().AddNewtonsoftJson();
+
+
+
 
 // Automapper configuration
 builder.Services.AddAutoMapper(typeof(ContatoMapper));

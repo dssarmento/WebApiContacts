@@ -1,6 +1,9 @@
 ﻿using Contacts.Domain.Interfaces;
 using Contacts.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ApiContacts.Controllers
 {
@@ -8,24 +11,24 @@ namespace ApiContacts.Controllers
     [ApiController]
     public class TokenJwtController : ControllerBase
     {
-        private readonly ITokenService _tokenService;
+        private readonly IAccountService _accountservice;
 
-        public TokenJwtController(ITokenService tokenService)
+        public TokenJwtController(IAccountService accountservice)
         {
-            _tokenService = tokenService;
+            _accountservice = accountservice;
+        }
+             
+
+        [HttpPost("Register")]
+        public async Task<ActionResult<UserToken>> Register([FromBody] UserInfo model)
+        {
+            return await _accountservice.Register(model);
         }
 
-        [HttpPost]
-        public IActionResult Token([FromBody] UserJwtToken usuario)
+        [HttpPost("Login")]
+        public async Task<ActionResult<UserToken>> Login([FromBody] UserInfo userInfo)
         {
-            var token = _tokenService.GetToken(usuario);
-
-            if (!string.IsNullOrWhiteSpace(token))
-            {
-                return Ok(token);
-            }
-
-            return Unauthorized();
+            return await _accountservice.LoginAsync(userInfo);
         }
     }
 }

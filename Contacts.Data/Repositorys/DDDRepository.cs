@@ -15,9 +15,9 @@ namespace Contacts.Data.Repositorys
             _context = context;
         }
 
-        public IList<DDD> BuscaTodosDDDs()
+        public List<DDD> BuscaTodosDDDs()
         {
-            return CacheManager.ObterOuDefinirCache("TodosOsDDDs", () => _context.DDDs.AsNoTracking().ToList(), DateTimeOffset.UtcNow.AddMinutes(10));
+            return _context.DDDs.ToList();
         }
 
         public DDD BuscaDDDPorId(int id)
@@ -35,12 +35,12 @@ namespace Contacts.Data.Repositorys
             return DDD;
         }
 
-        public DDD AtualizaDDD(DDD DDD)
+        public DDD AtualizaDDD(DDD dDD)
         {
-            _context.DDDs.Update(DDD);
+            _context.DDDs.Update(dDD);
             _context.SaveChangesAsync();
 
-            return DDD;
+            return dDD;
         }
 
         public bool DeletaDDD(int id)

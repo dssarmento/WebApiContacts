@@ -2,6 +2,7 @@
 using Contacts.Domain.Interfaces;
 using Contacts.Domain.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -42,6 +43,7 @@ namespace Contacts.Data.Repositorys
                 AccessFailedCount = 0
             };
 
+
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
@@ -50,7 +52,7 @@ namespace Contacts.Data.Repositorys
                 await _userManager.AddToRoleAsync(user, "User");
 
                 //incluir um novo usuário com email que começa com admin no perfil Admin
-                if (user.Email.StartsWith("admin"))
+                if (user.Email.ToUpper().StartsWith("A"))
                 {
                     await _userManager.AddToRoleAsync(user, "Admin");
                 }
@@ -102,7 +104,7 @@ namespace Contacts.Data.Repositorys
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:key"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwt:SecretJWT"]));
             var creds =
                new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 

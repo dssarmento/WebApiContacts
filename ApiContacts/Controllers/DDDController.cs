@@ -1,5 +1,7 @@
 ﻿using Contacts.Domain.Interfaces;
+using Contacts.Domain.Models;
 using Contacts.Domain.ModelsView;
+using Contacts.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -49,7 +51,7 @@ namespace ApiContacts.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public IActionResult Post([FromBody] DDDViewModel dDD)
         {
             try
@@ -65,7 +67,7 @@ namespace ApiContacts.Controllers
 
         [HttpPut]
         [Authorize]
-        public IActionResult Put([FromBody] DDDViewModel dDD)
+        public IActionResult Put([FromBody] DDDViewUpdateModel dDD)
         {
             try
             {

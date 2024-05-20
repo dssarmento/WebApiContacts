@@ -15,41 +15,78 @@ namespace Contacts.Data.Repositorys
             _context = context;
         }
 
-        public IList<Contato> BuscaTodosContatos()
+        public List<Contato> BuscaTodosContatos()
         {
-            return CacheManager.ObterOuDefinirCache("BuscaTodosContatos", 
-                () => _context.Contatos.AsNoTracking().ToList(), DateTimeOffset.UtcNow.AddMinutes(10));
+            var listContatos = (from Co in _context.Contatos
+                                join Dd in _context.DDDs on Co.DDDId equals Dd.DDDId
+                                select new Contato()
+                                {
+                                    ContatoId = Co.ContatoId,
+                                    Nome = Co.Nome,
+                                    Telefone = Co.Telefone,
+                                    Email = Co.Email,
+                                    DDDId = Co.DDDId,
+                                    DDD = Co.DDD
+                                }).ToList();
+
+            return listContatos;
         }
 
         public Contato BuscaContatoPorId(int id)
         {
-          return  CacheManager.ObterOuDefinirCache("BuscaContatoPorId",
-                () => _context.Contatos.AsNoTracking().FirstOrDefault(x => x.ContatoId == id) ??
-                throw new KeyNotFoundException("Contato não encontrado"), DateTimeOffset.UtcNow.AddMinutes(10));
+
+            var contato = (from Co in _context.Contatos
+                           join Dd in _context.DDDs on Co.DDDId equals Dd.DDDId
+                           where Co.ContatoId == id
+                           select new Contato()
+                           {
+                               ContatoId = Co.ContatoId,
+                               Nome = Co.Nome,
+                               Telefone = Co.Telefone,
+                               Email = Co.Email,
+                               DDDId = Co.DDDId,
+                               DDD = Co.DDD
+                           }).FirstOrDefault();
+
+
+            return contato;
         }
 
-        public IList<Contato> BuscaContatosPorDDDId(int id)
+        public List<Contato> BuscaContatosPorDDDId(int id)
         {
-            return CacheManager.ObterOuDefinirCache("BuscaContatosPorDDDId",
-                () => _context.Contatos.Where(p => p.DDDId == id).AsNoTracking().ToList(), DateTimeOffset.UtcNow.AddMinutes(10));
+            var listContatos = (from Co in _context.Contatos
+                                join Dd in _context.DDDs on Co.DDDId equals Dd.DDDId
+                                where Co.DDDId == id
+                                select new Contato()
+                                {
+                                    ContatoId = Co.ContatoId,
+                                    Nome = Co.Nome,
+                                    Telefone = Co.Telefone,
+                                    Email = Co.Email,
+                                    DDDId = Co.DDDId,
+                                    DDD = Co.DDD
+                                }).ToList();
+
+            return listContatos;
         }
 
-        public IList<Contato> BuscaContatosPorDDDNome(string Nome)
+        public List<Contato> BuscaContatosPorDDDNome(string Nome)
         {
-            var cache = CacheManager.ObterOuDefinirCache("BuscaContatosPorDDDNome",
-                () => (from Co in _context.Contatos
-                       join Dd in _context.DDDs on Co.DDDId equals Dd.DDDId
-                       where Dd.Nome.Trim().ToUpper().ToString() == Nome.Trim().ToUpper().ToString()
-                       select new Contato()
-                       {
-                           ContatoId = Co.ContatoId,
-                           Nome = Co.Nome,
-                           Telefone = Co.Telefone,
-                           Email = Co.Email,
-                           DDDId = Co.DDDId
-                       }).AsNoTracking().ToList(), DateTimeOffset.UtcNow.AddMinutes(10));
+            var listContatos = (from Co in _context.Contatos
+                                join Dd in _context.DDDs on Co.DDDId equals Dd.DDDId
+                                where Dd.Nome.Trim().ToUpper().ToString() == Nome.Trim().ToUpper().ToString()
+                                select new Contato()
+                                {
+                                    ContatoId = Co.ContatoId,
+                                    Nome = Co.Nome,
+                                    Telefone = Co.Telefone,
+                                    Email = Co.Email,
+                                    DDDId = Co.DDDId,
+                                    DDD = Co.DDD
+                                }).ToList();
 
-            return cache;
+
+            return listContatos;
         }
 
         public Contato CriaContato(Contato contato)
@@ -63,7 +100,7 @@ namespace Contacts.Data.Repositorys
         public Contato AtualizaContato(Contato contato)
         {
             _context.Contatos.Update(contato);
-            _context.SaveChangesAsync();
+            _context.SaveChanges();
             return contato;
         }
 

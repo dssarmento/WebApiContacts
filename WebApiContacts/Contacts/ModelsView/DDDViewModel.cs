@@ -2,7 +2,7 @@
 {
     public class DDDViewModel
     {
-        public int DDDId { get; set; }
+        public int Ddd { get; set; }
         public string Nome { get; set; }
     }
 }
