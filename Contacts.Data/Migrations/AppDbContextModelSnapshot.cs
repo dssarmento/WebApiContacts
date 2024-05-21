@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace WebApiContacts.Migrations
+namespace Contacts.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -17,10 +17,10 @@ namespace WebApiContacts.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Contacts.Domain.Models.Contato", b =>
                 {
@@ -28,7 +28,7 @@ namespace WebApiContacts.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContatoId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContatoId"));
 
                     b.Property<int>("DDDId")
                         .HasColumnType("int");
@@ -61,16 +61,43 @@ namespace WebApiContacts.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DDDId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DDDId"));
+
+                    b.Property<int>("Ddd")
+                        .HasMaxLength(10)
+                        .HasColumnType("int");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("DDDId");
 
                     b.ToTable("DDDs");
+                });
+
+            modelBuilder.Entity("Contacts.Domain.Models.UserJwtToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserJwtToken");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -102,15 +129,15 @@ namespace WebApiContacts.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f64c1743-6c80-4115-b25b-6e668ea20e82",
-                            ConcurrencyStamp = "e1afcc7b-ddb2-477c-b15b-fa18f4ae2c45",
+                            Id = "65fbceab-09c5-4301-b308-04be2867b96a",
+                            ConcurrencyStamp = "1f171707-a698-460f-b355-f3bfe2fc09e0",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "4837d9a4-4ff2-4b01-9dad-8f9b2a20b9ac",
-                            ConcurrencyStamp = "20c985c7-dc87-447a-98b2-deaf63d1509d",
+                            Id = "58fcc142-fb8a-4b81-8906-556a4ddddf84",
+                            ConcurrencyStamp = "02ded1c5-15d3-40d4-a5f0-e128c0f4b739",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -122,7 +149,7 @@ namespace WebApiContacts.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -212,7 +239,7 @@ namespace WebApiContacts.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -290,7 +317,7 @@ namespace WebApiContacts.Migrations
             modelBuilder.Entity("Contacts.Domain.Models.Contato", b =>
                 {
                     b.HasOne("Contacts.Domain.Models.DDD", "DDD")
-                        .WithMany("Contatos")
+                        .WithMany()
                         .HasForeignKey("DDDId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -347,11 +374,6 @@ namespace WebApiContacts.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Contacts.Domain.Models.DDD", b =>
-                {
-                    b.Navigation("Contatos");
                 });
 #pragma warning restore 612, 618
         }

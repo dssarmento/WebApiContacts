@@ -1,18 +1,15 @@
 ﻿using Contacts.Domain.Models;
-using System.Linq;
-using System.Threading.Tasks;
 using Contacts.Domain.ModelsView;
-using WebApiContacts.Domain.Recursos;
 using System.Collections.Generic;
 
 namespace Contacts.Domain.Interfaces
 {
     public interface IDDDService
     {
-        List<DDD> GetAll();
-        DDD GetById(int id);
-        DDDRetornoView Post(DDDView dDD);
-        DDDRetornoView Put(DDDRetornoView dDD);
-        DDD Delete(int id);
+        List<DDD> BuscaTodosDDDs();
+        DDDViewModel BuscaDDDPorId(int id);
+        DDD CriaDDD(DDDViewModel dDD);
+        DDD AtualizaDDD(DDDViewUpdateModel dDD);
+        bool DeletaDDD(int id);
     }
 }

@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Contacts.Data\Contacts.Data.csproj" />
     <ProjectReference Include="..\WebApiContacts\Contacts\Contacts.Domain.csproj" />
   </ItemGroup>

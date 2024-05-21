@@ -3,10 +3,14 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace WebApiContacts.Migrations
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
+namespace Contacts.Data.Migrations
 {
-    public partial class Inicial : Migration
+    /// <inheritdoc />
+    public partial class inicial : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -54,11 +58,26 @@ namespace WebApiContacts.Migrations
                 {
                     DDDId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
+                    Ddd = table.Column<int>(type: "int", maxLength: 10, nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DDDs", x => x.DDDId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserJwtToken",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserJwtToken", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -192,12 +211,11 @@ namespace WebApiContacts.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "4b531b18-8c92-4a73-89aa-621cbec731cb", "2d477c73-526a-4de2-bc1d-2ac24d009787", "Admin", "ADMIN" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "8205da9e-f847-4f30-b1ca-ab5ddbf883f2", "1b1d8a0d-50de-41fc-bd96-5e874171b301", "User", "USER" });
+                values: new object[,]
+                {
+                    { "58fcc142-fb8a-4b81-8906-556a4ddddf84", "02ded1c5-15d3-40d4-a5f0-e128c0f4b739", "Admin", "ADMIN" },
+                    { "65fbceab-09c5-4301-b308-04be2867b96a", "1f171707-a698-460f-b355-f3bfe2fc09e0", "User", "USER" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -244,6 +262,7 @@ namespace WebApiContacts.Migrations
                 column: "DDDId");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
@@ -263,6 +282,9 @@ namespace WebApiContacts.Migrations
 
             migrationBuilder.DropTable(
                 name: "Contatos");
+
+            migrationBuilder.DropTable(
+                name: "UserJwtToken");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

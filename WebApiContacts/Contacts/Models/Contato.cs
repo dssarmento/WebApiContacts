@@ -20,6 +20,7 @@ namespace Contacts.Domain.Models
         public string Email { get; set; }
 
         public int DDDId { get; set; }
+
         public virtual DDD DDD { get; set; }
     }
 }

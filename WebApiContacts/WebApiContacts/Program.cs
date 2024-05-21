@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
@@ -18,5 +19,6 @@ namespace WebApiContacts.Server
                     .Build())
                 .UseStartup<Startup>()
                 .Build();
+
     }
 }

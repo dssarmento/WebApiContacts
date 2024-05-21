@@ -1,68 +1,58 @@
-﻿using Contacts.Domain.Models;
-using System.Linq;
-using System.Threading.Tasks;
-using Contacts.Domain.ModelsView;
-using WebApiContacts.Domain.Recursos;
-using System.Collections.Generic;
-using Contacts.Domain.Interfaces;
-using Contacts.Data.Context;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
+﻿using Contacts.Data.Context;
 using Contacts.Data.Utils;
+using Contacts.Domain.Interfaces;
+using Contacts.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Contacts.Data.Repositorys
 {
     public class DDDRepository : IDDDRepository
     {
-        private readonly AppDbContext context;
+        private readonly AppDbContext _context;
 
         public DDDRepository(AppDbContext context)
         {
-            this.context = context;
+            _context = context;
         }
 
-        public DDD Delete(int id)
+        public List<DDD> BuscaTodosDDDs()
         {
-            var dDD = new DDD { DDDId = id };
-            context.Remove(dDD);
-            context.SaveChangesAsync();
+            return _context.DDDs.ToList();
+        }
+
+        public DDD BuscaDDDPorId(int id)
+        {
+           return CacheManager.ObterOuDefinirCache("BuscaDDDPorId", () => 
+            _context.DDDs.Where(d => d.DDDId == id).AsNoTracking().FirstOrDefault() ?? 
+            throw new KeyNotFoundException("DDD não encontrado"), DateTimeOffset.UtcNow.AddMinutes(10));
+        }
+
+        public DDD CriaDDD(DDD DDD)
+        {
+            _context.DDDs.Add(DDD);
+            _context.SaveChanges();
+
+            return DDD;
+        }
+
+        public DDD AtualizaDDD(DDD dDD)
+        {
+            _context.DDDs.Update(dDD);
+            _context.SaveChangesAsync();
+
             return dDD;
         }
 
-        public List<DDD> GetAll()
+        public bool DeletaDDD(int id)
         {
-            return context.DDDs.ToList();
-        }
+            var ddd = BuscaDDDPorId(id);
 
-        public DDD GetById(int id)
-        {
-            return (DDD)context.DDDs.Where(x => x.DDDId == id);
-        }
+            if (ddd == null) return false;
 
-        public DDDRetornoView Post(DDDView dDD)
-        {
-            DDD ddados = new DDD();
-            ddados.Nome = dDD.Nome;
+            _context.DDDs.Remove(ddd);
+            _context.SaveChangesAsync();
 
-            context.Add(ddados);
-            context.SaveChangesAsync();
-
-            DDDRetornoView dretorno = new DDDRetornoView();
-            dretorno.DDDId = ddados.DDDId;
-            dretorno.Nome = ddados.Nome;
-            return dretorno;
-        }
-
-        public DDDRetornoView Put(DDDRetornoView dDD)
-        {
-            DDD ddados = new DDD();
-            ddados.DDDId = dDD.DDDId;
-            ddados.Nome = dDD.Nome;
-
-            context.Entry(ddados).State = EntityState.Modified;
-            context.SaveChangesAsync();
-
-            return dDD;
+            return true;
         }
     }
 }

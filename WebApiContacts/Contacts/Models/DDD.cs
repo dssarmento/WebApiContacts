@@ -8,9 +8,11 @@ namespace Contacts.Domain.Models
         [Key]
         public int DDDId { get; set; }
 
-        [Required(ErrorMessage = "O nome do DDD é obrigatório")]
         [MaxLength(10)]
+        public int Ddd { get; set; }
+
+        [Required(ErrorMessage = "O nome do DDD é obrigatório")]
+        [MaxLength(50)]
         public string Nome { get; set; }
-        public ICollection<Contato> Contatos { get; set; }
     }
 }

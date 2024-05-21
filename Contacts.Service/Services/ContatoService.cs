@@ -1,54 +1,123 @@
-﻿using Contacts.Domain.ModelsView;
-using WebApiContacts.Domain.Recursos;
-using System.Collections.Generic;
+﻿using AutoMapper;
+using Contacts.Data.Repositorys;
 using Contacts.Domain.Interfaces;
-using Contacts.Data.Context;
 using Contacts.Domain.Models;
+using Contacts.Domain.ModelsView;
+using Microsoft.Extensions.Logging;
+using NPOI.SS.Formula.Functions;
 
 namespace Contacts.Service.Services
 {
     public  class ContatoService : IContatoService
     {
         private readonly IContatoRepository _contatoRepository;
+        private readonly IMapper _mapper;
+        private readonly ILogger<ContatoService> _logger;
 
-        public ContatoService(IContatoRepository contatoRepository)
+        public ContatoService(IContatoRepository contatoRepository,IMapper mapper, ILogger<ContatoService> logger)
         {
             _contatoRepository = contatoRepository;
+            _mapper = mapper;
+            _logger = logger;
         }
 
-        public Contato Delete(int id)
+        public List<Contato> BuscaTodosContatos()
         {
-            return _contatoRepository.Delete(id);
+            try
+            {
+                return _contatoRepository.BuscaTodosContatos();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Erro na aplicação - {ex}");
+                throw;
+            }
         }
 
-        public List<Contato> GetAll()
+        public Contato BuscaContatoPorId(int id)
         {
-            return _contatoRepository.GetAll();
+            try
+            {
+                return _contatoRepository.BuscaContatoPorId(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Erro na aplicação - {ex}");
+                throw;
+            }
         }
 
-        public Contato GetByID(int id)
+        public List<Contato> BuscaContatoPorDDDId(int id)
         {
-            return _contatoRepository.GetById(id);
+            try
+            {
+                return _contatoRepository.BuscaContatosPorDDDId(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Erro na aplicação - {ex}");
+                throw;
+            }
         }
 
-        public List<Contato> GetContatosDDDId(int id)
+        public List<Contato> BuscaContatoPorDDDNome(string Nome)
         {
-            return _contatoRepository.GetContatosDDDId(id);
+            try
+            {
+                return _contatoRepository.BuscaContatosPorDDDNome(Nome);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Erro na aplicação - {ex}");
+                throw;
+            }
         }
 
-        public List<Contato> GetContatosDDDNome(string Nome)
+        public Contato CriaNovoContato(ContatoViewModel Contato)
         {
-            return _contatoRepository.GetContatosDDDNome(Nome);
+            try
+            {
+                var ContatoMapping = _contatoRepository.CriaContato(_mapper.Map<Contato>(Contato));
+                return ContatoMapping;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Erro na aplicação - {ex}");
+                throw;
+            }
         }
 
-        public ContatoRetornoView Post(ContatoView contato)
+        public Contato AtualizaContato(ContatoViewUpdateModel contato)
         {
-            return _contatoRepository.Post(contato);
+            try
+            {
+                Contato vContato = new Contato();
+                vContato.ContatoId = contato.ContatoId;
+                vContato.Nome = contato.Nome;
+                vContato.Telefone = contato.Telefone;
+                vContato.Email = contato.Email;
+                vContato.DDDId = contato.DDDId;
+                var ContatoMapping = _contatoRepository.AtualizaContato(vContato);
+                return ContatoMapping;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Erro na aplicação - {ex}");
+                throw;
+            }
         }
 
-        ContatoRetornoView IContatoService.Put(ContatoRetornoView contato)
+        public bool DeletaContato(int id)
         {
-            return _contatoRepository.Put(contato);
+            try
+            {
+                return _contatoRepository.DeletaContato(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Erro na aplicação - {ex}");
+                throw;
+            }
         }
     }
 }

@@ -1,97 +1,119 @@
-﻿using Contacts.Domain.Models;
-using System.Linq;
-using System.Threading.Tasks;
-using Contacts.Domain.ModelsView;
-using WebApiContacts.Domain.Recursos;
-using System.Collections.Generic;
-using Contacts.Domain.Interfaces;
-using Contacts.Data.Context;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
+﻿using Contacts.Data.Context;
 using Contacts.Data.Utils;
+using Contacts.Domain.Interfaces;
+using Contacts.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Contacts.Data.Repositorys
 {
     public  class ContatoRepository : IContatoRepository
     {
-        private readonly AppDbContext context;
+        private readonly AppDbContext _context;
 
         public ContatoRepository(AppDbContext context)
         {
-            this.context = context;
+            _context = context;
         }
 
-        public Contato Delete(int id)
+        public List<Contato> BuscaTodosContatos()
         {
-            var Contato = new Contato { ContatoId = id };
-            context.Remove(Contato);
-            context.SaveChangesAsync();
-            return Contato;
+            var listContatos = (from Co in _context.Contatos
+                                join Dd in _context.DDDs on Co.DDDId equals Dd.DDDId
+                                select new Contato()
+                                {
+                                    ContatoId = Co.ContatoId,
+                                    Nome = Co.Nome,
+                                    Telefone = Co.Telefone,
+                                    Email = Co.Email,
+                                    DDDId = Co.DDDId,
+                                    DDD = Co.DDD
+                                }).ToList();
+
+            return listContatos;
         }
 
-        public List<Contato> GetAll()
+        public Contato BuscaContatoPorId(int id)
         {
-            return context.Contatos.ToList();
+
+            var contato = (from Co in _context.Contatos
+                           join Dd in _context.DDDs on Co.DDDId equals Dd.DDDId
+                           where Co.ContatoId == id
+                           select new Contato()
+                           {
+                               ContatoId = Co.ContatoId,
+                               Nome = Co.Nome,
+                               Telefone = Co.Telefone,
+                               Email = Co.Email,
+                               DDDId = Co.DDDId,
+                               DDD = Co.DDD
+                           }).FirstOrDefault();
+
+
+            return contato;
         }
 
-        public Contato GetById(int id)
+        public List<Contato> BuscaContatosPorDDDId(int id)
         {
-            return (Contato)context.Contatos.Where(x => x.ContatoId == id);
+            var listContatos = (from Co in _context.Contatos
+                                join Dd in _context.DDDs on Co.DDDId equals Dd.DDDId
+                                where Co.DDDId == id
+                                select new Contato()
+                                {
+                                    ContatoId = Co.ContatoId,
+                                    Nome = Co.Nome,
+                                    Telefone = Co.Telefone,
+                                    Email = Co.Email,
+                                    DDDId = Co.DDDId,
+                                    DDD = Co.DDD
+                                }).ToList();
+
+            return listContatos;
         }
 
-        public List<Contato> GetContatosDDDId(int id)
+        public List<Contato> BuscaContatosPorDDDNome(string Nome)
         {
-            return  context.Contatos.Where(p => p.DDDId == id).ToList();
-        }
-
-        public List<Contato> GetContatosDDDNome(string Nome)
-        {
-            var listContatos = (from Co in context.Contatos
-                                join Dd in context.DDDs on Co.DDDId equals Dd.DDDId
+            var listContatos = (from Co in _context.Contatos
+                                join Dd in _context.DDDs on Co.DDDId equals Dd.DDDId
                                 where Dd.Nome.Trim().ToUpper().ToString() == Nome.Trim().ToUpper().ToString()
                                 select new Contato()
                                 {
                                     ContatoId = Co.ContatoId,
                                     Nome = Co.Nome,
                                     Telefone = Co.Telefone,
-                                    Email =Co.Email,
-                                    DDDId = Co.DDDId
+                                    Email = Co.Email,
+                                    DDDId = Co.DDDId,
+                                    DDD = Co.DDD
                                 }).ToList();
+
 
             return listContatos;
         }
 
-        public ContatoRetornoView Post(ContatoView contato)
+        public Contato CriaContato(Contato contato)
         {
-            Contato ddados = new Contato();
-            ddados.Nome = contato.Nome;
-            ddados.Telefone = contato.Telefone;
-            ddados.Email = contato.Email;
-            ddados.DDDId = contato.DDDId;
+            _context.Contatos.Add(contato);
+            _context.SaveChanges();
 
-            context.Add(ddados);
-            context.SaveChangesAsync();
-
-            ContatoRetornoView dretorno = new ContatoRetornoView();
-            dretorno.Nome = ddados.Nome;
-            dretorno.Telefone = ddados.Telefone;
-            dretorno.Email = ddados.Email;
-            dretorno.DDDId = ddados.DDDId;
-            return dretorno;
+            return contato;
         }
 
-        public ContatoRetornoView Put(ContatoRetornoView contato)
+        public Contato AtualizaContato(Contato contato)
         {
-            Contato ddados = new Contato();
-            ddados.ContatoId = contato.ContatoId;
-            ddados.Nome = contato.Nome;
-            ddados.Telefone = contato.Telefone;
-            ddados.Email = contato.Email;
-            ddados.DDDId = contato.DDDId;
-
-            context.Entry(ddados).State = EntityState.Modified;
-            context.SaveChangesAsync();
+            _context.Contatos.Update(contato);
+            _context.SaveChanges();
             return contato;
+        }
+
+        public bool DeletaContato(int id)
+        {
+            var contato = BuscaContatoPorId(id);
+
+            if (contato == null) return false;
+
+            _context.Remove(contato);
+            _context.SaveChangesAsync();
+
+            return true;
         }
     }
 }

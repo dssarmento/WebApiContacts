@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/ApiContactslogs/LOG-2024-05-20.txt
+/.gitignore
