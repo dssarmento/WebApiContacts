@@ -9,7 +9,6 @@ namespace Contacts.Service.Mapper
         public ContatoMapper()
         {
             CreateMap<Contato, ContatoViewModel>()
-                //.ForPath(destino => destino.DDD., option => option.MapFrom(origem => origem.DDD.Nome))
                 .ReverseMap();
         }
     }
