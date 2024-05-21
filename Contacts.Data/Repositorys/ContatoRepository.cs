@@ -94,6 +94,10 @@ namespace Contacts.Data.Repositorys
             _context.Contatos.Add(contato);
             _context.SaveChanges();
 
+            var dddId = _context.DDDs.Where(ddd => ddd.DDDId == contato.DDDId);
+            var dddNome = dddId.FirstOrDefault();
+            contato.DDD.Nome = dddNome.Nome;
+
             return contato;
         }
 

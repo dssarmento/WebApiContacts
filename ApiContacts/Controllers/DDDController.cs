@@ -51,7 +51,7 @@ namespace ApiContacts.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         public IActionResult Post([FromBody] DDDViewModel dDD)
         {
             try

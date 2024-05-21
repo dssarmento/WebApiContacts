@@ -73,7 +73,7 @@ builder.Services.AddResponseCompression(opts =>
 
 // Sql server configuration
 builder.Services.AddDbContext<AppDbContext>(options =>
-               options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+               options.UseSqlServer(builder.Configuration.GetConnectionString("SandroDbConnection"))
                );
 
 // Dependence injection configuration 
@@ -90,9 +90,6 @@ builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 
 builder.Services.AddMvc().AddNewtonsoftJson();
-
-
-
 
 // Automapper configuration
 builder.Services.AddAutoMapper(typeof(ContatoMapper));

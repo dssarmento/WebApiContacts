@@ -78,6 +78,7 @@ namespace Contacts.Service.Services
             try
             {
                 var ContatoMapping = _contatoRepository.CriaContato(_mapper.Map<Contato>(Contato));
+
                 return ContatoMapping;
             }
             catch (Exception ex)
