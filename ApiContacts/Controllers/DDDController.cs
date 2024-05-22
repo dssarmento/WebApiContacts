@@ -26,7 +26,7 @@ namespace ApiContacts.Controllers
         {
             try
             {
-                return Ok(_dDDService.BuscaTodosDDDs());
+                return Ok(_dDDService.BuscaTodosDDDs().Result);
             }
             catch(Exception ex)
             {
@@ -41,7 +41,7 @@ namespace ApiContacts.Controllers
         {
             try
             {
-                return Ok(_dDDService.BuscaDDDPorId(id));
+                return Ok(_dDDService.BuscaDDDPorId(id).Result);
             }
             catch(Exception ex)
             {
@@ -56,7 +56,7 @@ namespace ApiContacts.Controllers
         {
             try
             {
-                return Ok(_dDDService.CriaDDD(dDD));
+                return Ok(_dDDService.CriaDDD(dDD).Result);
             }
             catch(Exception ex)
             {
@@ -71,7 +71,7 @@ namespace ApiContacts.Controllers
         {
             try
             {
-                return Ok(_dDDService.AtualizaDDD(dDD));
+                return Ok(_dDDService.AtualizaDDD(dDD).Result);
             }
             catch (Exception ex)
             {
@@ -86,7 +86,7 @@ namespace ApiContacts.Controllers
         {
             try
             {
-                return Ok(_dDDService.DeletaDDD(id));
+                return Ok(_dDDService.DeletaDDD(id).Result);
             }
             catch (Exception ex)
             {

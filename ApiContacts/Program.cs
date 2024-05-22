@@ -51,25 +51,7 @@ builder.Services.AddResponseCompression(opts =>
         new[] { "application/octet-stream" });
 });
 
-//builder.Services.AddAuthentication(authenticationOpt =>
-//{
-//    authenticationOpt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    authenticationOpt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//}).AddJwtBearer(jwtBearerOpt =>
-//  {
-//      jwtBearerOpt.RequireHttpsMetadata = false;
-//      jwtBearerOpt.SaveToken = true;
-//      jwtBearerOpt.TokenValidationParameters = new TokenValidationParameters()
-//      {
-//          ValidateIssuer = false,
-//          ValidateAudience = false,
-//          ValidateLifetime = true,
-//          ValidateIssuerSigningKey = true,
-//          IssuerSigningKey = new SymmetricSecurityKey(
-//                     Encoding.UTF8.GetBytes(configuration.GetValue<string>("SecretJWT"))),
-//          ClockSkew = TimeSpan.Zero
-//      };
-//  });
+
 
 // Sql server configuration
 builder.Services.AddDbContext<AppDbContext>(options =>

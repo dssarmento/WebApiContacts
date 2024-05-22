@@ -3,6 +3,7 @@ using Contacts.Data.Utils;
 using Contacts.Domain.Interfaces;
 using Contacts.Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 
 namespace Contacts.Data.Repositorys
 {
@@ -15,44 +16,44 @@ namespace Contacts.Data.Repositorys
             _context = context;
         }
 
-        public List<DDD> BuscaTodosDDDs()
+        public async Task<List<DDD>> BuscaTodosDDDs()
         {
-            return _context.DDDs.ToList();
+            return await Task.FromResult(_context.DDDs.ToList());
         }
 
-        public DDD BuscaDDDPorId(int id)
+        public async Task<DDD> BuscaDDDPorId(int id)
         {
-           return CacheManager.ObterOuDefinirCache("BuscaDDDPorId", () => 
+           return await Task.FromResult(CacheManager.ObterOuDefinirCache("BuscaDDDPorId", () => 
             _context.DDDs.Where(d => d.DDDId == id).AsNoTracking().FirstOrDefault() ?? 
-            throw new KeyNotFoundException("DDD não encontrado"), DateTimeOffset.UtcNow.AddMinutes(10));
+            throw new KeyNotFoundException("DDD não encontrado"), DateTimeOffset.UtcNow.AddMinutes(10)));
         }
 
-        public DDD CriaDDD(DDD DDD)
+        public async Task<DDD> CriaDDD(DDD DDD)
         {
             _context.DDDs.Add(DDD);
             _context.SaveChanges();
 
-            return DDD;
+            return await Task.FromResult(DDD);
         }
 
-        public DDD AtualizaDDD(DDD dDD)
+        public async Task<DDD> AtualizaDDD(DDD dDD)
         {
             _context.DDDs.Update(dDD);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-            return dDD;
+            return await Task.FromResult(dDD);
         }
 
-        public bool DeletaDDD(int id)
+        public async Task<bool> DeletaDDD(int id)
         {
             var ddd = BuscaDDDPorId(id);
 
             if (ddd == null) return false;
 
-            _context.DDDs.Remove(ddd);
-            _context.SaveChangesAsync();
+            _context.DDDs.Remove(await ddd);
+            await _context.SaveChangesAsync();
 
-            return true;
+            return await Task.FromResult(true);
         }
     }
 }

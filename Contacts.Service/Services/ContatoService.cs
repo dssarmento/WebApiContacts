@@ -21,11 +21,11 @@ namespace Contacts.Service.Services
             _logger = logger;
         }
 
-        public List<Contato> BuscaTodosContatos()
+        public async Task<List<Contato>> BuscaTodosContatos()
         {
             try
             {
-                return _contatoRepository.BuscaTodosContatos();
+                return await _contatoRepository.BuscaTodosContatos();
             }
             catch (Exception ex)
             {
@@ -34,11 +34,11 @@ namespace Contacts.Service.Services
             }
         }
 
-        public Contato BuscaContatoPorId(int id)
+        public async Task<Contato> BuscaContatoPorId(int id)
         {
             try
             {
-                return _contatoRepository.BuscaContatoPorId(id);
+                return await _contatoRepository.BuscaContatoPorId(id);
             }
             catch (Exception ex)
             {
@@ -47,11 +47,11 @@ namespace Contacts.Service.Services
             }
         }
 
-        public List<Contato> BuscaContatoPorDDDId(int id)
+        public async Task<List<Contato>> BuscaContatoPorDDDId(int id)
         {
             try
             {
-                return _contatoRepository.BuscaContatosPorDDDId(id);
+                return await _contatoRepository.BuscaContatosPorDDDId(id);
             }
             catch (Exception ex)
             {
@@ -60,11 +60,11 @@ namespace Contacts.Service.Services
             }
         }
 
-        public List<Contato> BuscaContatoPorDDDNome(string Nome)
+        public async Task<List<Contato>> BuscaContatoPorDDDNome(string Nome)
         {
             try
             {
-                return _contatoRepository.BuscaContatosPorDDDNome(Nome);
+                return await _contatoRepository.BuscaContatosPorDDDNome(Nome);
             }
             catch (Exception ex)
             {
@@ -73,11 +73,11 @@ namespace Contacts.Service.Services
             }
         }
 
-        public Contato CriaNovoContato(ContatoViewModel Contato)
+        public async Task<Contato> CriaNovoContato(ContatoViewModel Contato)
         {
             try
             {
-                var ContatoMapping = _contatoRepository.CriaContato(_mapper.Map<Contato>(Contato));
+                var ContatoMapping = await _contatoRepository.CriaContato(_mapper.Map<Contato>(Contato));
 
                 return ContatoMapping;
             }
@@ -88,7 +88,7 @@ namespace Contacts.Service.Services
             }
         }
 
-        public Contato AtualizaContato(ContatoViewUpdateModel contato)
+        public async Task<Contato> AtualizaContato(ContatoViewUpdateModel contato)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace Contacts.Service.Services
                 vContato.Telefone = contato.Telefone;
                 vContato.Email = contato.Email;
                 vContato.DDDId = contato.DDDId;
-                var ContatoMapping = _contatoRepository.AtualizaContato(vContato);
+                var ContatoMapping = await _contatoRepository.AtualizaContato(vContato);
                 return ContatoMapping;
             }
             catch (Exception ex)
@@ -108,11 +108,11 @@ namespace Contacts.Service.Services
             }
         }
 
-        public bool DeletaContato(int id)
+        public async Task<bool> DeletaContato(int id)
         {
             try
             {
-                return _contatoRepository.DeletaContato(id);
+                return await _contatoRepository.DeletaContato(id);
             }
             catch (Exception ex)
             {

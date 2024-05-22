@@ -30,7 +30,7 @@ namespace Contact.Service.Tests
         }
 
         [Fact]
-        public void ContatoServiceDeveCriarUmObjeto()
+        public async void ContatoServiceDeveCriarUmObjeto()
         {
             // Arrange
             var ddd = new DDD
@@ -46,7 +46,7 @@ namespace Contact.Service.Tests
                 Nome = "Rio Grande do Sul"
             };
 
-            _repositoryDDD.Setup(repository => repository.CriaDDD(It.IsAny<DDD>())).Returns(ddd);
+            _repositoryDDD.Setup(repository => repository.CriaDDD(It.IsAny<DDD>())).ReturnsAsync(ddd);
             _mapper.Setup(map => map.Map<DDDViewModel>(ddd)).Returns(dddViewModel);
 
             // Act
@@ -69,17 +69,17 @@ namespace Contact.Service.Tests
                 DDDId = 1
             };
 
-            _repository.Setup(repository => repository.CriaContato(It.IsAny<Contato>())).Returns(contato);
+            _repository.Setup(repository => repository.CriaContato(It.IsAny<Contato>())).ReturnsAsync(contato);
             _mapper.Setup(map => map.Map<ContatoViewModel>(contato)).Returns(contatoViewModel);
 
-            var criarContato = _service.CriaNovoContato(contatoViewModel);
+            var criarContato = await _service.CriaNovoContato(contatoViewModel);
 
             // Assert
             Assert.Equal(contato, criarContato);
         }
 
         [Fact]
-        public void ContatoServiceDeveAtualizarUmObjeto()
+        public async void ContatoServiceDeveAtualizarUmObjeto()
         {
             var contato = new Contato
             {
@@ -99,18 +99,18 @@ namespace Contact.Service.Tests
                 DDDId = 1
             };
 
-           _repository.Setup(repository => repository.AtualizaContato(It.IsAny<Contato>())).Returns(contato);
+           _repository.Setup(repository => repository.AtualizaContato(It.IsAny<Contato>())).ReturnsAsync(contato);
             _mapper.Setup(map => map.Map<ContatoViewUpdateModel>(contato)).Returns(contatoUpdate);
 
             // Act
-            var atualizaContato = _service.AtualizaContato(contatoUpdate);
+            var atualizaContato = await _service.AtualizaContato(contatoUpdate);
 
             // Assert
             Assert.Equal(contato, atualizaContato);
         }
 
         [Fact]
-        public void ContatoServiceDeveRetornarLista()
+        public async void ContatoServiceDeveRetornarLista()
         {
             // Arrange
             List<Contato> listaDeContato = new List<Contato>()
@@ -136,11 +136,11 @@ namespace Contact.Service.Tests
                 }
             };
 
-            _repository.Setup(repository => repository.BuscaTodosContatos()).Returns(listaDeContato);
+            _repository.Setup(repository => repository.BuscaTodosContatos()).ReturnsAsync(listaDeContato);
             _mapper.Setup(map => map.Map<List<ContatoViewModel>>(listaDeContato)).Returns(listaDeContatoViewModel);
 
             // Act
-            var buscaDDD = _service.BuscaTodosContatos();
+            var buscaDDD = await _service.BuscaTodosContatos();
 
 
             // Assert
@@ -148,7 +148,7 @@ namespace Contact.Service.Tests
         }
 
         [Fact]
-        public void ContatoServiceDeveRetornarUmObjeto()
+        public async void ContatoServiceDeveRetornarUmObjeto()
         {
             // Arrange
             var contato = new Contato
@@ -168,18 +168,18 @@ namespace Contact.Service.Tests
                 DDDId = 1
             };
 
-            _repository.Setup(repository => repository.BuscaContatoPorId(It.IsAny<int>())).Returns(contato);
+            _repository.Setup(repository => repository.BuscaContatoPorId(It.IsAny<int>())).ReturnsAsync(contato);
             _mapper.Setup(map => map.Map<ContatoViewModel>(contato)).Returns(contatoViewModel);
 
             // Act
-            var buscaDddPorId = _service.BuscaContatoPorId(1);
+            var buscaDddPorId = await _service.BuscaContatoPorId(1);
 
             // Assert
             Assert.Equal(contato, buscaDddPorId);
         }
 
         [Fact]
-        public void ContatoServiceDeveRetornarListaPorDDDId()
+        public async void ContatoServiceDeveRetornarListaPorDDDId()
         {
             // Arrange
             List<Contato> listaDeContato = new List<Contato>()
@@ -211,11 +211,11 @@ namespace Contact.Service.Tests
                 }
             };
 
-            _repository.Setup(repository => repository.BuscaContatosPorDDDId(1)).Returns(listaDeContato);
+            _repository.Setup(repository => repository.BuscaContatosPorDDDId(1)).ReturnsAsync(listaDeContato);
             _mapper.Setup(map => map.Map<List<ContatoViewModel>>(listaDeContato)).Returns(listaDeContatoViewModel);
 
             // Act
-            var buscaContato = _service.BuscaContatoPorDDDId(1);
+            var buscaContato = await _service.BuscaContatoPorDDDId(1);
 
 
             // Assert
@@ -223,7 +223,7 @@ namespace Contact.Service.Tests
         }
 
         [Fact]
-        public void ContatoServiceDeveRetornarListaPorDDDNome()
+        public async void ContatoServiceDeveRetornarListaPorDDDNome()
         {
             // Arrange
             List<Contato> listaDeContato = new List<Contato>()
@@ -255,11 +255,11 @@ namespace Contact.Service.Tests
                 }
             };
 
-            _repository.Setup(repository => repository.BuscaContatosPorDDDNome("Rio Grande do Sul")).Returns(listaDeContato);
+            _repository.Setup(repository => repository.BuscaContatosPorDDDNome("Rio Grande do Sul")).ReturnsAsync(listaDeContato);
             _mapper.Setup(map => map.Map<List<ContatoViewModel>>(listaDeContato)).Returns(listaDeContatoViewModel);
 
             // Act
-            var buscaContato = _service.BuscaContatoPorDDDNome("Rio Grande do Sul");
+            var buscaContato = await _service.BuscaContatoPorDDDNome("Rio Grande do Sul");
 
 
             // Assert
@@ -267,13 +267,13 @@ namespace Contact.Service.Tests
         }
 
         [Fact]
-        public void ContatoServiceDeveExecutarComSucesso()
+        public async void ContatoServiceDeveExecutarComSucesso()
         {
             // Arrange
-            _repository.Setup(repository => repository.DeletaContato(It.IsAny<int>())).Returns(true);
+            _repository.Setup(repository => repository.DeletaContato(It.IsAny<int>())).ReturnsAsync(true);
 
             // Act
-            var deletaContato = _service.DeletaContato(1);
+            var deletaContato = await _service.DeletaContato(1);
 
             // Assert
             Assert.True(deletaContato);

@@ -25,7 +25,7 @@ namespace Contact.Service.Tests
                
 
         [Fact]
-        public void DDDServiceDeveCriarUmObjeto()
+        public async void DDDServiceDeveCriarUmObjeto()
         {
             // Arrange
             var ddd = new DDD
@@ -41,11 +41,11 @@ namespace Contact.Service.Tests
                 Nome = "Rio Grande do Sul"                
             };
 
-            _repository.Setup(repository => repository.CriaDDD(It.IsAny<DDD>())).Returns(ddd);
+            _repository.Setup(repository => repository.CriaDDD(It.IsAny<DDD>())).ReturnsAsync(ddd);
             _mapper.Setup(map => map.Map<DDDViewModel>(ddd)).Returns(dddViewModel);
 
             // Act
-            var criarDDD = _service.CriaDDD(dddViewModel);
+            var criarDDD = await _service.CriaDDD(dddViewModel);
 
             
 
@@ -54,7 +54,7 @@ namespace Contact.Service.Tests
         }
 
         [Fact]
-        public void DDDServiceDeveAtualizarUmObjeto()
+        public async void DDDServiceDeveAtualizarUmObjeto()
         {
             // Arrange
             var ddd = new DDD
@@ -71,18 +71,18 @@ namespace Contact.Service.Tests
                 Nome = "Rio Grande"
             };
 
-            _repository.Setup(repository => repository.AtualizaDDD(It.IsAny<DDD>())).Returns(ddd);
+            _repository.Setup(repository => repository.AtualizaDDD(It.IsAny<DDD>())).ReturnsAsync(ddd);
             _mapper.Setup(map => map.Map<DDDViewUpdateModel>(ddd)).Returns(dddUpdate);
 
             // Act
-            var atualizaDDD = _service.AtualizaDDD(dddUpdate);
+            var atualizaDDD = await _service.AtualizaDDD(dddUpdate);
 
             // Assert
             Assert.Equal(ddd, atualizaDDD);
         }
 
         [Fact]
-        public void DDDServiceDeveRetornarLista()
+        public async void DDDServiceDeveRetornarLista()
         {
             // Arrange
             List<DDD> listaDeDDD = new List<DDD>()
@@ -103,11 +103,11 @@ namespace Contact.Service.Tests
                 }
             };
 
-            _repository.Setup(repository => repository.BuscaTodosDDDs()).Returns(listaDeDDD);
+            _repository.Setup(repository => repository.BuscaTodosDDDs()).ReturnsAsync(listaDeDDD);
             _mapper.Setup(map => map.Map<List<DDDViewModel>>(listaDeDDD)).Returns(listaDeDDDViewModel);
 
             // Act
-            var buscaDDD = _service.BuscaTodosDDDs();
+            var buscaDDD = await _service.BuscaTodosDDDs();
 
 
             // Assert
@@ -115,7 +115,7 @@ namespace Contact.Service.Tests
         }
 
         [Fact]
-        public void DDDServiceDeveRetornarUmObjeto()
+        public async void DDDServiceDeveRetornarUmObjeto()
         {
             // Arrange
             var ddd = new DDD
@@ -131,24 +131,24 @@ namespace Contact.Service.Tests
                 Nome = "Rio Grande do Sul"
             };
 
-            _repository.Setup(repository => repository.BuscaDDDPorId(It.IsAny<int>())).Returns(ddd);
+            _repository.Setup(repository => repository.BuscaDDDPorId(It.IsAny<int>())).ReturnsAsync(ddd);
             _mapper.Setup(map => map.Map<DDDViewModel>(ddd)).Returns(dddViewModel);
 
             // Act
-            var buscaDddPorId = _service.BuscaDDDPorId(1);
+            var buscaDddPorId = await _service.BuscaDDDPorId(1);
 
             // Assert
             Assert.Equal(dddViewModel, buscaDddPorId);
         }
 
         [Fact]
-        public void DDDServiceDeveExecutarComSucesso()
+        public async void DDDServiceDeveExecutarComSucesso()
         {
             // Arrange
-            _repository.Setup(repository => repository.DeletaDDD(It.IsAny<int>())).Returns(true);
+            _repository.Setup(repository => repository.DeletaDDD(It.IsAny<int>())).ReturnsAsync(true);
 
             // Act
-            var deletaDDD = _service.DeletaDDD(1);
+            var deletaDDD = await _service.DeletaDDD(1);
 
             // Assert
             Assert.True(deletaDDD);

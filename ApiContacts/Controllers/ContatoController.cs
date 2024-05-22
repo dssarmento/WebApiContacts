@@ -25,7 +25,7 @@ namespace ApiContacts.Controllers
         {
             try
             {
-                return Ok(_contatoService.BuscaTodosContatos());
+                return Ok(_contatoService.BuscaTodosContatos().Result);
             }
             catch (Exception ex)
             {
@@ -40,7 +40,7 @@ namespace ApiContacts.Controllers
         {
             try
             {
-                return Ok(_contatoService.BuscaContatoPorId(id));
+                return Ok(_contatoService.BuscaContatoPorId(id).Result);
             }
             catch (Exception ex)
             {
@@ -55,7 +55,7 @@ namespace ApiContacts.Controllers
         {
             try
             {
-                return Ok(_contatoService.BuscaContatoPorDDDId(id));
+                return Ok(_contatoService.BuscaContatoPorDDDId(id).Result);
             }
             catch (Exception ex)
             {
@@ -70,7 +70,7 @@ namespace ApiContacts.Controllers
         {
             try
             {
-                return Ok(_contatoService.BuscaContatoPorDDDNome(nome));
+                return Ok(_contatoService.BuscaContatoPorDDDNome(nome).Result);
             }
             catch(Exception ex)
             {
@@ -85,7 +85,7 @@ namespace ApiContacts.Controllers
         {
             try
             {
-                return Ok(_contatoService.CriaNovoContato(contato));
+                return Ok(_contatoService.CriaNovoContato(contato).Result);
             }
             catch(Exception ex)
             {
@@ -100,7 +100,7 @@ namespace ApiContacts.Controllers
         {
             try
             {
-                return Ok(_contatoService.AtualizaContato(contato));
+                return Ok(_contatoService.AtualizaContato(contato).Result);
             }
             catch(Exception ex)
             {
@@ -115,7 +115,7 @@ namespace ApiContacts.Controllers
         {
             try
             {
-                return Ok(_contatoService.DeletaContato(id));
+                return Ok(_contatoService.DeletaContato(id).Result);
             }
             catch(Exception ex)
             {

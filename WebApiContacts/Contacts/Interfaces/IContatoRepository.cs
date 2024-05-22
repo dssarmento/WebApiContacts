@@ -1,16 +1,17 @@
 ﻿using Contacts.Domain.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Contacts.Domain.Interfaces
 {
     public interface IContatoRepository
     {
-        List<Contato> BuscaTodosContatos();
-        Contato BuscaContatoPorId(int id);
-        List<Contato> BuscaContatosPorDDDId(int id);
-        List<Contato> BuscaContatosPorDDDNome(string Nome);
-        Contato CriaContato(Contato contato);
-        Contato AtualizaContato(Contato contato);
-        bool DeletaContato(int id);
+        Task<List<Contato>> BuscaTodosContatos();
+        Task<Contato> BuscaContatoPorId(int id);
+        Task<List<Contato>> BuscaContatosPorDDDId(int id);
+        Task<List<Contato>> BuscaContatosPorDDDNome(string Nome);
+        Task<Contato> CriaContato(Contato contato);
+        Task<Contato> AtualizaContato(Contato contato);
+        Task<bool> DeletaContato(int id);
     }
 }

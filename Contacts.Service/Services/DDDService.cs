@@ -19,11 +19,11 @@ namespace Contacts.Service.Services
             _logger = logger;
         }
 
-        public List<DDD> BuscaTodosDDDs()
+        public async Task<List<DDD>> BuscaTodosDDDs()
         {
             try
             {
-                return _dDDRepository.BuscaTodosDDDs();
+                return await _dDDRepository.BuscaTodosDDDs();
             }
             catch(Exception ex)
             {
@@ -32,11 +32,11 @@ namespace Contacts.Service.Services
             }
         }
 
-        public DDDViewModel BuscaDDDPorId(int id)
+        public async Task<DDDViewModel> BuscaDDDPorId(int id)
         {
             try
             {
-                return _mapper.Map<DDDViewModel>(_dDDRepository.BuscaDDDPorId(id));
+                return _mapper.Map<DDDViewModel>(await _dDDRepository.BuscaDDDPorId(id));
             }
             catch(Exception ex)
             {
@@ -45,12 +45,12 @@ namespace Contacts.Service.Services
             }
         }
 
-        public DDD CriaDDD(DDDViewModel DDD)
+        public async Task<DDD> CriaDDD(DDDViewModel DDD)
         {
             try
             {
                 var DddMapping = _dDDRepository.CriaDDD(_mapper.Map<DDD>(DDD));
-                return DddMapping;
+                return await DddMapping;
             }
             catch(Exception ex) 
             {
@@ -59,7 +59,7 @@ namespace Contacts.Service.Services
             }
         }
 
-        public DDD AtualizaDDD(DDDViewUpdateModel dDD)
+        public async Task<DDD> AtualizaDDD(DDDViewUpdateModel dDD)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace Contacts.Service.Services
                 vdDD.Ddd = dDD.Ddd;
                 vdDD.Nome = dDD.Nome;
                 var DddMapping = _dDDRepository.AtualizaDDD(vdDD);
-                return DddMapping;
+                return await DddMapping;
             }
             catch(Exception ex)
             {
@@ -77,11 +77,11 @@ namespace Contacts.Service.Services
             }
         }
 
-        public bool DeletaDDD(int id)
+        public async Task<bool> DeletaDDD(int id)
         {
             try
             {
-                return _dDDRepository.DeletaDDD(id);
+                return await _dDDRepository.DeletaDDD(id);
             }
             catch(Exception ex) 
             {

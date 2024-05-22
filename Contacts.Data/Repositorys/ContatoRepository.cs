@@ -15,7 +15,7 @@ namespace Contacts.Data.Repositorys
             _context = context;
         }
 
-        public List<Contato> BuscaTodosContatos()
+        public async Task<List<Contato>> BuscaTodosContatos()
         {
             var listContatos = (from Co in _context.Contatos
                                 join Dd in _context.DDDs on Co.DDDId equals Dd.DDDId
@@ -29,10 +29,10 @@ namespace Contacts.Data.Repositorys
                                     DDD = Co.DDD
                                 }).ToList();
 
-            return listContatos;
+            return await Task.FromResult(listContatos);
         }
 
-        public Contato BuscaContatoPorId(int id)
+        public async Task<Contato> BuscaContatoPorId(int id)
         {
 
             var contato = (from Co in _context.Contatos
@@ -46,13 +46,13 @@ namespace Contacts.Data.Repositorys
                                Email = Co.Email,
                                DDDId = Co.DDDId,
                                DDD = Co.DDD
-                           }).FirstOrDefault();
+                           }).First();
 
 
-            return contato;
+            return await Task.FromResult(contato);
         }
 
-        public List<Contato> BuscaContatosPorDDDId(int id)
+        public async Task<List<Contato>> BuscaContatosPorDDDId(int id)
         {
             var listContatos = (from Co in _context.Contatos
                                 join Dd in _context.DDDs on Co.DDDId equals Dd.DDDId
@@ -67,10 +67,10 @@ namespace Contacts.Data.Repositorys
                                     DDD = Co.DDD
                                 }).ToList();
 
-            return listContatos;
+            return await Task.FromResult(listContatos);
         }
 
-        public List<Contato> BuscaContatosPorDDDNome(string Nome)
+        public async Task<List<Contato>> BuscaContatosPorDDDNome(string Nome)
         {
             var listContatos = (from Co in _context.Contatos
                                 join Dd in _context.DDDs on Co.DDDId equals Dd.DDDId
@@ -86,38 +86,40 @@ namespace Contacts.Data.Repositorys
                                 }).ToList();
 
 
-            return listContatos;
+            return await Task.FromResult(listContatos);
         }
 
-        public Contato CriaContato(Contato contato)
+        public async Task<Contato> CriaContato(Contato contato)
         {
             _context.Contatos.Add(contato);
             _context.SaveChanges();
 
-            var dddId = _context.DDDs.Where(ddd => ddd.DDDId == contato.DDDId);
-            var dddNome = dddId.FirstOrDefault();
-            contato.DDD.Nome = dddNome.Nome;
+            DDD vDDD = new DDD();
+            vDDD = _context.DDDs.Where(ddd => ddd.DDDId == contato.DDDId).First();
 
-            return contato;
+            contato.DDD.Ddd = vDDD.Ddd;
+            contato.DDD.Nome = vDDD.Nome;
+
+            return await Task.FromResult(contato);
         }
 
-        public Contato AtualizaContato(Contato contato)
+        public async Task<Contato> AtualizaContato(Contato contato)
         {
             _context.Contatos.Update(contato);
             _context.SaveChanges();
-            return contato;
+            return await Task.FromResult(contato);
         }
 
-        public bool DeletaContato(int id)
+        public async Task<bool> DeletaContato(int id)
         {
             var contato = BuscaContatoPorId(id);
 
             if (contato == null) return false;
 
             _context.Remove(contato);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-            return true;
+            return await Task.FromResult(true);
         }
     }
 }
