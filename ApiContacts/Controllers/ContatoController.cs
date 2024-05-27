@@ -1,5 +1,4 @@
 ﻿using Contacts.Domain.Interfaces;
-using Contacts.Domain.Models;
 using Contacts.Domain.ModelsView;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +34,7 @@ namespace ApiContacts.Controllers
         }
 
         [HttpGet("BuscaContatoPorId/{id}")]
-        //[Authorize]
+        [Authorize]
         public IActionResult Get(int id)
         {
             try

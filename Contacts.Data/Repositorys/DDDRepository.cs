@@ -1,9 +1,7 @@
 ﻿using Contacts.Data.Context;
-using Contacts.Data.Utils;
 using Contacts.Domain.Interfaces;
 using Contacts.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol;
 
 namespace Contacts.Data.Repositorys
 {
@@ -18,22 +16,21 @@ namespace Contacts.Data.Repositorys
 
         public async Task<List<DDD>> BuscaTodosDDDs()
         {
-            return await Task.FromResult(_context.DDDs.ToList());
+            return await _context.DDDs.ToListAsync();
         }
 
         public async Task<DDD> BuscaDDDPorId(int id)
         {
-           return await Task.FromResult(CacheManager.ObterOuDefinirCache("BuscaDDDPorId", () => 
-            _context.DDDs.Where(d => d.DDDId == id).AsNoTracking().FirstOrDefault() ?? 
-            throw new KeyNotFoundException("DDD não encontrado"), DateTimeOffset.UtcNow.AddMinutes(10)));
+           return await _context.DDDs.Where(d => d.DDDId == id).AsNoTracking().FirstOrDefaultAsync() ?? 
+                throw new KeyNotFoundException("DDD não encontrado");
         }
 
         public async Task<DDD> CriaDDD(DDD DDD)
         {
             _context.DDDs.Add(DDD);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return await Task.FromResult(DDD);
+            return DDD;
         }
 
         public async Task<DDD> AtualizaDDD(DDD dDD)
@@ -41,7 +38,7 @@ namespace Contacts.Data.Repositorys
             _context.DDDs.Update(dDD);
             await _context.SaveChangesAsync();
 
-            return await Task.FromResult(dDD);
+            return dDD;
         }
 
         public async Task<bool> DeletaDDD(int id)
@@ -53,7 +50,7 @@ namespace Contacts.Data.Repositorys
             _context.DDDs.Remove(await ddd);
             await _context.SaveChangesAsync();
 
-            return await Task.FromResult(true);
+            return true;
         }
     }
 }

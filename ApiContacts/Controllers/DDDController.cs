@@ -1,7 +1,5 @@
 ﻿using Contacts.Domain.Interfaces;
-using Contacts.Domain.Models;
 using Contacts.Domain.ModelsView;
-using Contacts.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

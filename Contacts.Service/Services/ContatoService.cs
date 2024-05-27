@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using Contacts.Data.Repositorys;
 using Contacts.Domain.Interfaces;
 using Contacts.Domain.Models;
 using Contacts.Domain.ModelsView;
 using Microsoft.Extensions.Logging;
-using NPOI.SS.Formula.Functions;
 
 namespace Contacts.Service.Services
 {
