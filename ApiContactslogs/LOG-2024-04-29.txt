@@ -1,0 +1,159 @@
+Information: 14 - Now listening on: https://localhost:7216
+Information: 14 - Now listening on: http://localhost:5064
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: C:\Users\Sandro\Documents\GIT\WebApiContacts\ApiContacts
+Information: 20101 - Executed DbCommand (22ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [c].[ContatoId], [c].[DDDId], [c].[Email], [c].[Nome], [c].[Telefone]
+FROM [Contatos] AS [c]
+WHERE [c].[DDDId] = @__id_0
+Information: 14 - Now listening on: https://localhost:7216
+Information: 14 - Now listening on: http://localhost:5064
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: C:\Users\Sandro\Documents\GIT\WebApiContacts\ApiContacts
+Information: 20101 - Executed DbCommand (9ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+Information: 20101 - Executed DbCommand (7ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+Information: 20101 - Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+Information: 20101 - Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+Information: 20101 - Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+Information: 20402 - Applying migration '20240429215245_addUserJwtTable'.
+Information: 20101 - Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [IdentityRole]
+WHERE [Id] = N'1aa3d74f-ccb7-4912-9a83-9eb64bf41220';
+SELECT @@ROWCOUNT;
+Information: 20101 - Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [IdentityRole]
+WHERE [Id] = N'2f70c51d-c9b3-48cd-80a4-d9da8af665cd';
+SELECT @@ROWCOUNT;
+Information: 20101 - Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [UserJwtToken] (
+    [Id] int NOT NULL IDENTITY,
+    [Username] nvarchar(50) NOT NULL,
+    [Password] nvarchar(50) NOT NULL,
+    CONSTRAINT [PK_UserJwtToken] PRIMARY KEY ([Id])
+);
+Information: 20101 - Executed DbCommand (10ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'ConcurrencyStamp', N'Name', N'NormalizedName') AND [object_id] = OBJECT_ID(N'[IdentityRole]'))
+    SET IDENTITY_INSERT [IdentityRole] ON;
+INSERT INTO [IdentityRole] ([Id], [ConcurrencyStamp], [Name], [NormalizedName])
+VALUES (N'bdfced0d-ca08-439c-bc2f-9c3dbef9becc', N'0805419f-4bf6-4bb8-8dbb-f93ba435f51b', N'Admin', N'ADMIN'),
+(N'da224b17-ec28-4fca-b82b-d6e9b4bff8e3', N'60618c7a-114c-4070-b39c-401817b9fc08', N'User', N'USER');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'ConcurrencyStamp', N'Name', N'NormalizedName') AND [object_id] = OBJECT_ID(N'[IdentityRole]'))
+    SET IDENTITY_INSERT [IdentityRole] OFF;
+Information: 20101 - Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20240429215245_addUserJwtTable', N'8.0.4');
+Information: 14 - Now listening on: https://localhost:7216
+Information: 14 - Now listening on: http://localhost:5064
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: C:\Users\Sandro\Documents\GIT\WebApiContacts\ApiContacts
+Information: 20101 - Executed DbCommand (23ms) [Parameters=[@__userObj_Username_0='?' (Size = 50), @__userObj_Password_1='?' (Size = 50)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [UserJwtToken] AS [u]
+        WHERE [u].[Username] = @__userObj_Username_0 AND [u].[Password] = @__userObj_Password_1) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+Information: 14 - Now listening on: https://localhost:7216
+Information: 14 - Now listening on: http://localhost:5064
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: C:\Users\Sandro\Documents\GIT\WebApiContacts\ApiContacts
+Information: 20101 - Executed DbCommand (21ms) [Parameters=[@__userObj_Username_0='?' (Size = 50), @__userObj_Password_1='?' (Size = 50)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [UserJwtToken] AS [u]
+        WHERE [u].[Username] = @__userObj_Username_0 AND [u].[Password] = @__userObj_Password_1) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+Information: 14 - Now listening on: https://localhost:7216
+Information: 14 - Now listening on: http://localhost:5064
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: C:\Users\Sandro\Documents\GIT\WebApiContacts\ApiContacts
+Information: 20101 - Executed DbCommand (20ms) [Parameters=[@__userObj_Username_0='?' (Size = 50), @__userObj_Password_1='?' (Size = 50)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [UserJwtToken] AS [u]
+        WHERE [u].[Username] = @__userObj_Username_0 AND [u].[Password] = @__userObj_Password_1) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+Information: 14 - Now listening on: https://localhost:7216
+Information: 14 - Now listening on: http://localhost:5064
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: C:\Users\Sandro\Documents\GIT\WebApiContacts\ApiContacts
+Information: 20101 - Executed DbCommand (20ms) [Parameters=[@__userObj_Username_0='?' (Size = 50), @__userObj_Password_1='?' (Size = 50)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [UserJwtToken] AS [u]
+        WHERE [u].[Username] = @__userObj_Username_0 AND [u].[Password] = @__userObj_Password_1) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+Information: 14 - Now listening on: https://localhost:7216
+Information: 14 - Now listening on: http://localhost:5064
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: C:\Users\Sandro\Documents\GIT\WebApiContacts\ApiContacts
+Information: 20101 - Executed DbCommand (20ms) [Parameters=[@__userObj_Username_0='?' (Size = 50), @__userObj_Password_1='?' (Size = 50)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [UserJwtToken] AS [u]
+        WHERE [u].[Username] = @__userObj_Username_0 AND [u].[Password] = @__userObj_Password_1) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+Information: 14 - Now listening on: https://localhost:7216
+Information: 14 - Now listening on: http://localhost:5064
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: C:\Users\Sandro\Documents\GIT\WebApiContacts\ApiContacts
+Information: 14 - Now listening on: https://localhost:7216
+Information: 14 - Now listening on: http://localhost:5064
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: C:\Users\Sandro\Documents\GIT\WebApiContacts\ApiContacts
+Information: 14 - Now listening on: https://localhost:7216
+Information: 14 - Now listening on: http://localhost:5064
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: C:\Users\Sandro\Documents\GIT\WebApiContacts\ApiContacts
+Information: 20101 - Executed DbCommand (21ms) [Parameters=[@__userObj_Username_0='?' (Size = 50), @__userObj_Password_1='?' (Size = 50)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [UserJwtToken] AS [u]
+        WHERE [u].[Username] = @__userObj_Username_0 AND [u].[Password] = @__userObj_Password_1) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+Information: 20101 - Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [c].[ContatoId], [c].[DDDId], [c].[Email], [c].[Nome], [c].[Telefone]
+FROM [Contatos] AS [c]
+Information: 20101 - Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [d].[DDDId], [d].[Ddd], [d].[Nome]
+FROM [DDDs] AS [d]
+Information: 20101 - Executed DbCommand (2ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [c].[ContatoId], [c].[DDDId], [c].[Email], [c].[Nome], [c].[Telefone]
+FROM [Contatos] AS [c]
+WHERE [c].[ContatoId] = @__id_0
+Error: 0 - Erro na aplicação - System.Collections.Generic.KeyNotFoundException: Contato não encontrado
+   at Contacts.Data.Repositorys.ContatoRepository.BuscaContatoPorId(Int32 id) in C:\Users\Sandro\Documents\GIT\WebApiContacts\Contacts.Data\Repositorys\ContatoRepository.cs:line 24
+   at Contacts.Service.Services.ContatoService.BuscaContatoPorId(Int32 id) in C:\Users\Sandro\Documents\GIT\WebApiContacts\Contacts.Service\Services\ContatoService.cs:line 39
+Error: 0 - Erro na aplicação - System.Collections.Generic.KeyNotFoundException: Contato não encontrado
+   at Contacts.Data.Repositorys.ContatoRepository.BuscaContatoPorId(Int32 id) in C:\Users\Sandro\Documents\GIT\WebApiContacts\Contacts.Data\Repositorys\ContatoRepository.cs:line 24
+   at Contacts.Service.Services.ContatoService.BuscaContatoPorId(Int32 id) in C:\Users\Sandro\Documents\GIT\WebApiContacts\Contacts.Service\Services\ContatoService.cs:line 39
+   at ApiContacts.Controllers.ContatoController.Get(Int32 id) in C:\Users\Sandro\Documents\GIT\WebApiContacts\ApiContacts\Controllers\ContatoController.cs:line 43
+Error: 1 - An unhandled exception has occurred while executing the request.
